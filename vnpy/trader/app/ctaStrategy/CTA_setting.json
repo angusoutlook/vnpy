@@ -15,5 +15,14 @@
         "name": "king keltner",
         "className": "KkStrategy",
         "vtSymbol": "IH1706"
+    },
+
+    {
+        "name": "Visual Profit",
+        "className": "VPStrategy",
+        "vtSymbol": "RB1707",
+        "vtSymbol": "I1707",
+        "vtSymbol": "J1707"
     }
+
 ]
