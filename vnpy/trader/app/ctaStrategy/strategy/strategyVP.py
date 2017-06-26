@@ -21,32 +21,69 @@ from vnpy.trader.app.ctaStrategy.ctaTemplate import CtaTemplate
 ########################################################################
 class VPStrategy(CtaTemplate):
     """结合ATR和RSI指标的一个分钟线交易策略"""
+
+    # conditions
+    condition10 = False
+    condition11 = False
+    condition12 = False
+    condition13 = False
+    condition14 = False
+    condition15 = False
+    condition16 = False
+    condition17 = False
+    condition18 = False
+    condition19 = False
+
+    condition20 = False
+    condition21 = False
+    condition22 = False
+    condition23 = False
+    condition24 = False
+    condition25 = False
+    condition26 = False
+    condition27 = False
+    condition28 = False
+    condition29 = False
+
+    condition31 = False
+    condition32 = False
+
+    condition99 = False
+    conditionPriceLimit = False
+
     className = 'VPStrategy'
     author = u'Angus'
 
     # 策略参数
-    ma5 = 5
-    ma10 = 10
+    ma5Param = 5
+    ma10Param = 10
 
-    //rbKParam = ?
+    ma5Value = 0
+    ma10Value = 0
+
+    max10Profit = 0
+    min10Profit = 0
+
+    # rbKParam = ?
     iKParam = 1.66
     jMParam = 0.4
 
     pCost = 1000
 
+    currentTime = 0
     runtime = 144500
 
     base = 300
-    unitzone = 100
-    drawback= 120
+    unitZone = 100
+    drawBack= 120
 
     prb = 24
     pi = 4
     pj = 1
 
     realProfit = 0
-    RPMA5 = 0
-    RPMA10 = 0
+    rPMA5 = 0
+    rPMA10 = 0
 
     rbMAX10 = 0
     rbMIN10 = 0
@@ -55,17 +92,106 @@ class VPStrategy(CtaTemplate):
     jMAX10 = 0
     jMIN10 = 0
 
-    outputvars = false
-    outputsignal = false
-    outputaccountinfo= false
+    rbPrice = 0
+    iPrice = 0
+    jPrice = 0
 
-    DealUntis = 1
+    outputVars = False
+    outputSignal = False
+    outputAccountInfo= False
 
-    //资金参数
+    dealUnits = 1
+
+    # 资金参数
     marginRatio = 0.13
 
-
     initDays = 10  # 初始化数据所用的天数
+
+    # 策略条件
+    rbHighLimit = iHighLimit = jHighLimit = False
+    rbLowLimit = iLowLimit = jLowLimit = False
+    limitCondition = rbHighLimit & iHighLimit & jHighLimit & rbLowLimit & iLowLimit & jLowLimit
+
+    # long and short
+
+    def checkConditions(self):
+
+            # long
+            if self.ma5Value > self.ma10Value and self.realProfit > 700:
+                self.condition10 = True
+            if self.ma5Value >= self.ma10Value and 600 < self.realProfit and self.realProfit <= 700 \
+                    and self.limitCondition:
+                self.condition11 = True
+            if self.ma5Value >= self.ma10Value and 500 < self.realProfit and self.realProfit <= 600 \
+                    and self.limitCondition:
+                self.condition12 = True
+            if self.ma5Value >= self.ma10Value and 400 < self.realProfit and self.realProfit <= 500 \
+                    and self.limitCondition:
+                self.condition13 = True
+            if self.ma5Value >= self.ma10Value and 300 < self.realProfit and self.realProfit <= 400 \
+                    and self.limitCondition:
+                self.condition14 = True
+            if self.ma5Value >= self.ma10Value and 200 < self.realProfit and self.realProfit <= 300 \
+                    and self.limitCondition:
+                self.condition15 = True
+            if self.ma5Value >= self.ma10Value and 100 < self.realProfit and self.realProfit <= 200 \
+                    and self.limitCondition:
+                self.condition16 = True
+            if self.ma5Value >= self.ma10Value and 0 < self.realProfit and self.realProfit <= 100 \
+                    and self.limitCondition:
+                self.condition17 = True
+            if self.ma5Value >= self.ma10Value and -100 < self.realProfit and self.realProfit <= 0 \
+                    and self.limitCondition:
+                self.condition18 = True
+            if self.ma5Value >= self.ma10Value and self.realProfit <= -200 \
+                    and self.limitCondition:
+                self.condition19 = True
+
+            # short
+
+            if self.ma5Value < self.ma10Value and self.realProfit < 100:
+                self.condition20 = True
+            if self.ma5Value < self.ma10Value and 100 < self.realProfit and self.realProfit <= 200 \
+                    and self.limitCondition:
+                self.condition21 = True
+            if self.ma5Value < self.ma10Value and 200 < self.realProfit and self.realProfit <= 300 \
+                    and self.limitCondition:
+                self.condition22 = True
+            if self.ma5Value < self.ma10Value and 300 < self.realProfit and self.realProfit <= 400 \
+                    and self.limitCondition:
+                self.condition23 = True
+            if self.ma5Value < self.ma10Value and 400 < self.realProfit and self.realProfit <= 500 \
+                    and self.limitCondition:
+                self.condition24 = True
+            if self.ma5Value < self.ma10Value and 500 < self.realProfit and self.realProfit <= 600 \
+                    and self.limitCondition:
+                self.condition25 = True
+            if self.ma5Value < self.ma10Value and 600 < self.realProfit and self.realProfit <= 700 \
+                    and self.limitCondition:
+                self.condition26 = True
+            if self.ma5Value < self.ma10Value and 700 < self.realProfit and self.realProfit <= 800 \
+                    and self.limitCondition:
+                self.condition27 = True
+            if self.ma5Value < self.ma10Value and 800 < self.realProfit and self.realProfit <= 900 \
+                    and self.limitCondition:
+                self.condition28 = True
+            if self.ma5Value < self.ma10Value and self.realProfit > 900 and self.limitCondition:
+                self.condition29 = True
+
+            # pingcang
+            if self.ma5Value < self.ma10Value and self.realProfit <= self.max10Profit - self.drawBack:
+                self.condition31 = True
+            if self.ma5Value >= self.ma10Value and self.realProfit >= self.min10Profit - self.drawBack:
+                self.condition32 = True
+
+            # runtime check
+            if self.currentTime >= self.runtime:
+                self.condition99 = True
+
+            # priceLimit
+            self.conditionPriceLimit = self.rbHighLimit != self.rbPrice and self.iHighLimit != self.iPrice and \
+                                       self.jHighLimit != self.jPrice and self.rbLowLimit != self.rbPrice  and \
+                                       self.iLowLimit != self.iPrice and self.jLowLimit != self.jPrice
 
 
 
@@ -273,5 +399,3 @@ class VPStrategy(CtaTemplate):
         self.realProfit = rbdata-(self.iKParam*idata + self.jKParam*jdata+self.pCost)
         return
 
-    def getCondition(self):
-        #计算开仓条件
